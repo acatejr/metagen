@@ -14,6 +14,7 @@ import json
 import os
 import re
 import sys
+from datetime import datetime
 import xml.etree.ElementTree as ET
 
 # WSDL / SOAP namespaces
@@ -164,29 +165,16 @@ def build_dcat_us(info):
 
 
 def gap_report(info):
-    """Print a gap analysis to stdout."""
-    lines = []
-    lines.append("")
-    lines.append("=" * 70)
-    lines.append("DCAT-US Gap Report: ESRI WSDL → DCAT-US Crosswalk")
-    lines.append("=" * 70)
-    lines.append("")
-    lines.append(f"Source file type:  ESRI ArcGIS MapServer WSDL")
-    lines.append(f"Service name:     {info.get('service_name', 'N/A')}")
-    lines.append(f"Endpoint URL:     {info.get('endpoint_url', 'N/A')}")
-    lines.append(f"ESRI namespace:   {info.get('target_namespace', 'N/A')}")
-    lines.append(f"Operations found: {len(info.get('operations', []))}")
-    lines.append("")
-
+    """Build a markdown gap report and save it to the reports/ directory."""
     mapped = [
-        ("title", "Derived from service name", True),
-        ("identifier", "Service endpoint URL", True),
-        ("distribution.accessURL", "Service endpoint URL", True),
-        ("distribution.format", "ESRI SOAP MapServer", True),
-        ("distribution.mediaType", "application/xml", True),
-        ("publisher.name", "Inferred from domain", bool(info.get("publisher_name"))),
-        ("keyword", "Partial — derived from service name", True),
-        ("accessLevel", "Defaulted to 'public'", True),
+        ("title", "Derived from service name", "OK"),
+        ("identifier", "Service endpoint URL", "OK"),
+        ("distribution.accessURL", "Service endpoint URL", "OK"),
+        ("distribution.format", "ESRI SOAP MapServer", "OK"),
+        ("distribution.mediaType", "application/xml", "OK"),
+        ("publisher.name", "Inferred from domain", "OK" if info.get("publisher_name") else "PARTIAL"),
+        ("keyword", "Partial — derived from service name", "OK"),
+        ("accessLevel", "Defaulted to 'public'", "OK"),
     ]
 
     gaps = [
@@ -201,27 +189,62 @@ def gap_report(info):
         ("theme", "Not available in WSDL — requires manual input"),
     ]
 
-    lines.append("MAPPED FIELDS (extracted or inferred):")
-    lines.append("-" * 50)
-    for field, source, ok in mapped:
-        status = "OK" if ok else "PARTIAL"
-        lines.append(f"  [{status:>7}]  {field:<30} ← {source}")
+    lines = [
+        "# DCAT-US Gap Report: ESRI WSDL Crosswalk",
+        "",
+        "## Source Information",
+        "",
+        f"| Property | Value |",
+        f"|---|---|",
+        f"| **Source file type** | ESRI ArcGIS MapServer WSDL |",
+        f"| **Service name** | `{info.get('service_name', 'N/A')}` |",
+        f"| **Endpoint URL** | `{info.get('endpoint_url', 'N/A')}` |",
+        f"| **ESRI namespace** | `{info.get('target_namespace', 'N/A')}` |",
+        f"| **Operations found** | {len(info.get('operations', []))} |",
+        "",
+        "## Mapped Fields (extracted or inferred)",
+        "",
+        "| Status | DCAT-US Field | Source |",
+        "|---|---|---|",
+    ]
 
-    lines.append("")
-    lines.append("GAPS (require manual input):")
-    lines.append("-" * 50)
+    for field, source, status in mapped:
+        lines.append(f"| {status} | `{field}` | {source} |")
+
+    lines += [
+        "",
+        "## Gaps (require manual input)",
+        "",
+        "| DCAT-US Field | Notes |",
+        "|---|---|",
+    ]
+
     for field, note in gaps:
-        lines.append(f"  [   GAP]  {field:<30} — {note}")
+        lines.append(f"| `{field}` | {note} |")
 
-    lines.append("")
-    lines.append(f"Summary: {len(mapped)} fields mapped, {len(gaps)} gaps requiring manual input.")
-    lines.append("")
-    lines.append(f"Fields marked with '{PLACEHOLDER}'")
-    lines.append("in the output JSON must be filled in manually.")
-    lines.append("=" * 70)
-    lines.append("")
+    lines += [
+        "",
+        "## Summary",
+        "",
+        f"- **{len(mapped)}** fields mapped from the WSDL",
+        f"- **{len(gaps)}** gaps requiring manual input",
+        "",
+        f"Fields marked with `{PLACEHOLDER}` in the output JSON must be filled in manually.",
+        "",
+    ]
 
-    return "\n".join(lines)
+    md_content = "\n".join(lines)
+
+    # Save to reports/ with timestamped filename
+    reports_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "docs", "reports")
+    os.makedirs(reports_dir, exist_ok=True)
+    timestamp = datetime.now().strftime("%Y-%m-%d_%H%M%S")
+    report_path = os.path.join(reports_dir, f"gap_report_{timestamp}.md")
+
+    with open(report_path, "w", encoding="utf-8") as f:
+        f.write(md_content)
+
+    return md_content, report_path
 
 
 def main():
@@ -252,8 +275,10 @@ def main():
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(catalog, f, indent=2, ensure_ascii=False)
 
-    # Print gap report
-    print(gap_report(info))
+    # Generate and save gap report
+    md_content, report_path = gap_report(info)
+    print(md_content)
+    print(f"Gap report written to:   {report_path}")
     print(f"DCAT-US JSON written to: {output_path}")
 
 

@@ -35,6 +35,13 @@ metagen must also support analyzing an existing metadata XML file in one standar
 - Identifying **semantic mismatches** — elements that exist in both standards but differ in structure, cardinality, or allowed values.
 - Producing an actionable report: what is already covered, what is missing, and what transformations are needed to achieve compliance with the target standard.
 
+### Gap Report Output
+
+Gap reports must be:
+- **Formatted as Markdown** with proper headings, tables, and sections.
+- **Saved to `docs/reports/`** in the project root directory (create if it does not exist).
+- **Named with a timestamp:** `gap_report_YYYY-MM-DD_HHMMSS.md` (e.g., `gap_report_2026-02-12_143022.md`).
+
 ## Architecture Guidance
 
 - Use an **adapter/plugin pattern** for data source readers so new formats can be added without modifying core logic.

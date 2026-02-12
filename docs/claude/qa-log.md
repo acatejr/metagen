@@ -1,3 +1,9 @@
+---
+layout: base.njk
+title: Q&A Log
+permalink: /qa/
+---
+
 # Claude Q&A Log
 
 ### Q: How to crosswalk an ESRI WSDL to DCAT-US JSON?

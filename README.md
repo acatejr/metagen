@@ -19,6 +19,16 @@ metagen can generate metadata conforming to:
 - **FGDC CSDGM** -- Federal Geographic Data Committee Content Standard for Digital Geospatial Metadata
 - **DCAT / DCAT-US** -- Data Catalog Vocabulary (and its US federal profile)
 
+## Standards Crosswalk / Gap Analysis
+
+metagen can also analyze an existing metadata XML file and produce a crosswalk report to a different target standard. Given a source file (e.g., FGDC/CSDGM XML), the tool will:
+
+- Detect the source standard and version
+- Map elements to their equivalents in the target standard
+- Identify gaps -- required target elements with no corresponding source value
+- Flag semantic mismatches -- elements that differ in structure, cardinality, or allowed values
+- Produce an actionable report of what is covered, what is missing, and what transformations are needed
+
 ## Supported Data Sources
 
 ### Geospatial

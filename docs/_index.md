@@ -24,3 +24,4 @@ An AI/LLM-powered CLI tool that automatically generates standards-compliant meta
 ## Future Plans
 
 - Data inventory/metadata monitoring
+- After making guesses at a metadata conversion and correction build a mechanism where this tool can use the correction to improve itself.

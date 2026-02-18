@@ -10,6 +10,7 @@ An AI/LLM-powered CLI tool that automatically generates standards-compliant meta
 
 - [Reports]({{< relref "/reports" >}}) — Gap analysis and crosswalk reports
 - [Q&A Log]({{< relref "/qa" >}}) — Recorded questions and answers from development sessions
+- [Notes]({{< relref "/notes" >}}) — Development notes and reference entries
 
 ## Supported Metadata Standards
 

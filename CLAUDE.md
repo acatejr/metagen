@@ -4,7 +4,7 @@
 
 metagen is an AI/LLM-powered CLI tool that automatically generates standards-compliant metadata for geospatial and tabular datasets. See `README.md` for full project description.
 
-**Current status:** Planning and ideation phase. No application code exists yet. Key project documents: `README.md`, `ideas.md`, `tasks.md`, `claude.project.assessment.md`.
+**Current status:** Active development. Project structure and CLI scaffold are in place. Key project documents: `README.md`.
 
 ## Domain Expertise
 
@@ -72,3 +72,22 @@ When the user says **"record this"** or **"save this Q&A"**, append the most rec
 
 Create the `docs/claude/` directory and `qa-log.md` file if they do not already exist. Do not record unless explicitly asked.
 
+## Saving Notes
+
+When the user says **"save note"** or **"save this note"**, save the most recent question and answer to `docs/notes/` as a markdown file compatible with Hugo. The file name uses the current date and time formatted as `YYYY-MM-DD-HH-MM-SS.md` (e.g. `2026-02-18-20-46-55.md`). The front matter is YAML with:
+
+- `title`: the question
+- `date`: ISO 8601 format `YYYY-MM-DDTHH:MM:SS` (e.g. `2026-02-18T20:46:55`) — **not** the filename format
+- `draft: true`
+
+The contents of the file use this format:
+
+```
+### Q: <concise question summary>
+**Date:** <YYYY-MM-DD>
+
+<answer, preserving key details but written concisely>
+---
+```
+
+Create the `docs/notes` directory if it does not exist.

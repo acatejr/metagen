@@ -1,8 +1,40 @@
+# Secrets
 .env
+
+# Hugo
+public/
+resources/_gen/
+.hugo_build.lock
 *scratch*
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
 .venv/
 venv/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# uv
+.python-version
+
+# OS
 .DS_Store/
+
+# Node (legacy)
 node_modules/
 _site/
 
+# Data files
+data/
+
+# Editor / temp
+*.log
+*.bak
+*.tmp
+*.swp

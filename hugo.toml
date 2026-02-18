@@ -1,0 +1,10 @@
+baseURL = "https://acatejr.github.io/metagen/"
+languageCode = "en-us"
+title = "metagen"
+theme = "hugo-book"
+contentDir = "docs"
+
+[params]
+  BookSection = "/"
+  BookCollapseSection = true
+  BookSearch = true

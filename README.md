@@ -4,7 +4,7 @@ An AI-powered tool that automatically generates standards-compliant metadata for
 
 ## Overview
 
-Creating metadata for geospatial and tabular data is often tedious and time-consuming. **metagen** uses AI/LLM capabilities to inspect your data sources and produce well-structured metadata records that comply with established standards.
+Creating metadata for geospatial and tabular data is often tedious and time-consuming. **metagen** uses AI/LLM capabilities to inspect data sources and produce well-structured metadata records that comply with established standards.
 
 
 **THIS WORK IS PROOF OF CONCEPT AND IN PLANNING-DEVELOPMENT AND IDEA DEVELOPMENT!!!**
